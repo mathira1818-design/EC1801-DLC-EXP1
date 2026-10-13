@@ -139,6 +139,7 @@ The design was compiled and simulated using Synopsys VCS, and the functionality 
 13.	What is the purpose of $dumpfile?
 14.	What is the purpose of $dumpvars?
 
+
 Result
 Thus, the Boolean function was minimized, implemented using Verilog HDL, successfully simulated using Synopsys VCS, and verified using Synopsys DVE.
 
