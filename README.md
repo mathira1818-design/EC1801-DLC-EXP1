@@ -108,6 +108,7 @@ o	F
 4.	Run/inspect the waveform.
 5.	Verify that F = 1 whenever B and D are equal.
 6.	Verify that F = 0 whenever B and D are different.
+
 The waveform should agree with the truth table.
  
 ### Expected Result
@@ -117,8 +118,7 @@ was minimized to F=B'D'+BD.
 and successfully implemented using Verilog HDL.
 
 ## OUTPUT
-<img width="1785" height="970" alt="Screenshot 2026-10-13 121236" src="https://github.com/user-attachments/assets/577ac707-99e0-4cbf-aa58-f7e63f9ac8a4" />
-
+<img width="1865" height="994" alt="Screenshot 2026-10-13 155848" src="https://github.com/user-attachments/assets/57cf9d58-16d3-4bc3-929b-313ca9e5b409" />
 
 
 
