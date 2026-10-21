@@ -20,52 +20,57 @@ exp1_boolean_min_tb.v	Verilog testbench
 exp1_boolean_min.vcd	VCD waveform dump generated during simulation
 
 ## Verilog Program
-module boolean (
-input wire A, 
-input wire B, 
-output wire F 
-); 
-assign F = (~A) | B ;    // F = A' + B 
+module boolean_function (
+    input A, B, C, D,
+    output F
+);
+
+assign F = (~B & ~D) | (B & D);
+
 endmodule
 
 
 
 ## TestBench Program
-module tb;
-    reg A, B;
-    wire F;
-    // Instantiate the design under test (DUT)
-    fun uut (
-        .A(A),
-        .B(B),
-        .F(F)
-    );
 
-    initial begin
-        // ---- VCD dump setup ----
-        $dumpfile("fun.vcd");   // name of the VCD file to be generated
-        $dumpvars(0, tb);   // dump all signals in this testbench hierarchy
+`timescale 1ns/1ps
 
-        // ---- Apply all 4 input combinations ----
-        $monitor("Time=%0t A=%b B=%b | F=%b", $time, A, B, F);
+module tb_boolean_function;
 
-        A = 0; B = 0; #10;
-        A = 0; B = 1; #10;
-        A = 1; B = 0; #10;
-        A = 1; B = 1; #10;
+reg A, B, C, D;
+wire F;
 
-        #10 $finish;
+boolean_function uut (
+    .A(A),
+    .B(B),
+    .C(C),
+    .D(D),
+    .F(F)
+);
+
+initial begin
+    $monitor("A=%b B=%b C=%b D=%b | F=%b",
+              A, B, C, D, F);
+
+    {A,B,C,D} = 4'b0000;
+    repeat (16) begin
+        #10;
+        {A,B,C,D} = {A,B,C,D} + 1'b1;
     end
 
-endmodule
+    #10;
+    $finish;
+end
 
+endmodule
 
 
 
     
 ## Truth Table
  
-<img width="795" height="311" alt="image" src="https://github.com/user-attachments/assets/dd4ba5b9-016b-4ae5-a693-f309c60c4c0e" />
+<img width="1536" height="1119" alt="image" src="https://github.com/user-attachments/assets/4d6294ec-abfc-4d0b-b9e2-0c5c8e167682" />
+
 
 
 ## Simulation Procedure
@@ -117,6 +122,7 @@ The Boolean function
 F(A,B,C,D)=Σm(0,2,5,7,8,10,13,15), which simplifies to F=B'D'+BD.
 was minimized to F=B'D'+BD.
 and successfully implemented using Verilog HDL.
+<img width="598" height="369" alt="Screenshot 2026-10-21 120913" src="https://github.com/user-attachments/assets/57382f22-de9c-4f1e-8fda-d66b89d5faea" />
 
 The design was compiled and simulated using Synopsys VCS, and the functionality was verified using DVE waveform analysis.
 7. Viva-Voce Questions
