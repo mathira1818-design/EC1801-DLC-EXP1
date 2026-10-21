@@ -20,46 +20,49 @@ exp1_boolean_min_tb.v	Verilog testbench
 exp1_boolean_min.vcd	VCD waveform dump generated during simulation
 
 ## Verilog Program
-module boolean (
-input wire A, 
-input wire B, 
-output wire F 
-); 
-assign F = (~A) | B ;    // F = A' + B 
+module boolean_function (
+    input A, B, C, D,
+    output F
+);
+
+assign F = (~B & ~D) | (B & D);
+
 endmodule
 
 
 
 ## TestBench Program
 
-module tb;
-    reg A, B;
-    wire F;
-    // Instantiate the design under test (DUT)
-    boolean uut (
-        .A(A),
-        .B(B),
-        .F(F)
-    );
+`timescale 1ns/1ps
 
-    initial begin
-        // ---- VCD dump setup ----
-        $dumpfile("boolean.vcd");   // name of the VCD file to be generated
-        $dumpvars(0, tb);   // dump all signals in this testbench hierarchy
+module tb_boolean_function;
 
-        // ---- Apply all 4 input combinations ----
-        $monitor("Time=%0t A=%b B=%b | F=%b", $time, A, B, F);
+reg A, B, C, D;
+wire F;
 
-        A = 0; B = 0; #10;
-        A = 0; B = 1; #10;
-        A = 1; B = 0; #10;
-        A = 1; B = 1; #10;
+boolean_function uut (
+    .A(A),
+    .B(B),
+    .C(C),
+    .D(D),
+    .F(F)
+);
 
-        #10 $finish;
+initial begin
+    $monitor("A=%b B=%b C=%b D=%b | F=%b",
+              A, B, C, D, F);
+
+    {A,B,C,D} = 4'b0000;
+    repeat (16) begin
+        #10;
+        {A,B,C,D} = {A,B,C,D} + 1'b1;
     end
 
-endmodule
+    #10;
+    $finish;
+end
 
+endmodule
 
 
 
@@ -67,7 +70,8 @@ endmodule
     
 ## Truth Table
  
-<img width="795" height="311" alt="image" src="https://github.com/user-attachments/assets/dd4ba5b9-016b-4ae5-a693-f309c60c4c0e" />
+<img width="622" height="675" alt="Screenshot 2026-10-21 101332" src="https://github.com/user-attachments/assets/64cb4ea4-7ba7-44d0-8126-f9faf78d048d" />
+
 
 ## Simulation Procedure
 STEP 1 – Open Terminal
@@ -94,7 +98,7 @@ dve -full64
 Other option
 dve -full64 &
 A DVE environment will open.
-
+## OUTPUT
 ## DVE Waveform Verification
 In DVE:
 1.	Open the testbench hierarchy.
@@ -116,11 +120,6 @@ The Boolean function
 F(A,B,C,D)=Σm(0,2,5,7,8,10,13,15), which simplifies to F=B'D'+BD.
 was minimized to F=B'D'+BD.
 and successfully implemented using Verilog HDL.
-
-## OUTPUT
-<img width="1865" height="994" alt="Screenshot 2026-10-13 155848" src="https://github.com/user-attachments/assets/57cf9d58-16d3-4bc3-929b-313ca9e5b409" />
-
-
 
 The design was compiled and simulated using Synopsys VCS, and the functionality was verified using DVE waveform analysis.
 7. Viva-Voce Questions
